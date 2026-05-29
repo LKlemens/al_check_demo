@@ -1,0 +1,21 @@
+al_check_demo-*.tar
+
+# Build / deps
+/_build/
+/cover/
+/deps/
+/doc/
+/.fetch
+erl_crash.dump
+*.ez
+
+# AlCheck artifacts
+/.check/
+*.coverdata
+
+# Editors / OS
+.elixir_ls/
+.DS_Store
+
+# Livebook
+.livebook/

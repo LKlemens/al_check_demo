@@ -1,0 +1,26 @@
+{
+  "base_branch": "main",
+  "run": ["format", "compile", "compile_test", "credo", "credo_strict", "dialyzer", "test"],
+  "fast": ["format", "compile", "credo"],
+  "partitions": 3,
+  "max_concurrency": 8,
+  "coverage": {
+    "mod": "native",
+    "limit": 70,
+    "html": false
+  },
+  "fix": [
+    {"run": "mix format"}
+  ],
+  "checks": {
+    "format": {"name": "Formatting", "run": "mix format --check-formatted"},
+    "compile": {"name": "Compile", "run": "mix compile --warnings-as-errors"},
+    "compile_test": {"name": "Compile (test)", "run": "MIX_ENV=test mix compile --warnings-as-errors"},
+    "credo": {"name": "Credo", "run": "mix credo --all"},
+    "credo_strict": {"name": "Credo Strict", "run": "mix credo --strict --only readability --all"},
+    "dialyzer": {"name": "Dialyzer", "run": "mix dialyzer"},
+    "sobelow": {"name": "Security", "run": "mix sobelow --config"},
+    "modified_tests": {"name": "Modified Tests", "run": "builtin:modified_tests"},
+    "modified_test_modules": {"name": "Modified Test Modules", "run": "builtin:modified_test_modules"}
+  }
+}

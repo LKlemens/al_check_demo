@@ -1,0 +1,183 @@
+# AlCheck Demo Tour
+
+```elixir
+Mix.install([{:kino, "~> 0.13"}])
+```
+
+## What this notebook is
+
+A guided tour of [`al_check`](https://github.com/LKlemens/al_check), the
+parallel code-quality runner. The tour starts on a **healthy snapshot of
+the project** so you can see every command finishing green and fast.
+Scenario 7 then plants the seeded defects back in so you can watch
+`check --fast` surface them.
+
+Each scenario plays back a real terminal run via asciinema, with live
+spinner, colors, and animated test counts intact. Casts play at 30% speed
+so each step is easy to follow; idle gaps are trimmed to 2 seconds. The
+command being run is shown above each player.
+
+If a cast is missing, the embed shows a hint. Generate them with:
+
+```
+./scripts/record-casts.sh
+```
+
+## Helpers
+
+```elixir
+defmodule Tour do
+  @moduledoc false
+
+  @cdn_css "https://cdn.jsdelivr.net/npm/asciinema-player@3/dist/bundle/asciinema-player.min.css"
+  @cdn_js "https://cdn.jsdelivr.net/npm/asciinema-player@3/dist/bundle/asciinema-player.min.js"
+
+  @doc """
+  Embed an asciinema cast from `casts/<name>.cast`, with the shell command
+  rendered prominently above the player. Falls back to a hint when the cast
+  hasn't been recorded yet.
+  """
+  def cast(name, command) do
+    path = Path.expand("casts/#{name}.cast", __DIR__)
+    prompt = render_prompt(command)
+
+    if File.exists?(path) do
+      data = path |> File.read!() |> Base.encode64()
+      id = "player-#{name}-#{System.unique_integer([:positive])}"
+
+      Kino.HTML.new("""
+      <link rel="stylesheet" href="#{@cdn_css}" />
+      <div style="max-width: 1280px; margin: 0 auto;">
+        #{prompt}
+        <div id="#{id}"></div>
+      </div>
+      <script src="#{@cdn_js}"></script>
+      <script>
+        AsciinemaPlayer.create(
+          'data:text/plain;base64,#{data}',
+          document.getElementById('#{id}'),
+          {
+            fit: 'width',
+            theme: 'asciinema',
+            terminalFontSize: 'big',
+            speed: 0.3,
+            idleTimeLimit: 2
+          }
+        );
+      </script>
+      """)
+    else
+      Kino.HTML.new("""
+      <div style="max-width: 1280px; margin: 0 auto;">
+        #{prompt}
+        <p style="font-style: italic; color: #888;">
+          (no recording at <code>casts/#{name}.cast</code> — run
+          <code>./scripts/record-casts.sh</code> to create it)
+        </p>
+      </div>
+      """)
+    end
+  end
+
+  defp render_prompt(command) do
+    escaped =
+      command
+      |> String.replace("&", "&amp;")
+      |> String.replace("<", "&lt;")
+      |> String.replace(">", "&gt;")
+
+    """
+    <pre style="
+      background: #1e1e2e;
+      color: #f5f5f5;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-size: 18px;
+      line-height: 1.4;
+      margin: 0 0 10px 0;
+      overflow-x: auto;
+    "><span style="color: #7dd3fc;">$</span> #{escaped}</pre>
+    """
+  end
+end
+```
+
+## 1. Setup — is `check` on PATH?
+
+`check` is the al_check escript. If you've installed it from the sibling
+`../al_check` directory (`mix check.install` then `asdf reshim` if you use
+asdf), it lives on your PATH.
+
+```elixir
+Tour.cast("01-setup", "check --help | head -40")
+```
+
+## 2. ✅ Full run — everything green
+
+A healthy project: `check` runs `format`, `compile`, `compile_test`,
+`credo`, `credo_strict`, `dialyzer`, and `test` in parallel. The fan-out
+of checks across CPUs is the whole point.
+
+```elixir
+Tour.cast("02-green-full", "check")
+```
+
+## 3. ✅ `--only test` — just the tests, in partitions
+
+`check --only test` runs the test suite alone, partitioned in parallel
+per `.check.json`. Useful when you're iterating on test changes.
+
+```elixir
+Tour.cast("03-green-tests", "check --only test")
+```
+
+## 4. ✅ `--coverage` — coverage report + caching
+
+`check --coverage` runs the tests with coverage, merges partition
+results, and prints a per-module summary. Re-running with no source
+changes hits the cache instead of re-running the suite.
+
+```elixir
+Tour.cast("04-green-coverage", "check --coverage")
+```
+
+## 5. ✅ `--only modified_tests` — only what changed on this branch
+
+The `modified_tests` builtin compares the working tree against the base
+branch (set via `"base_branch"` in `.check.json`) and runs only the test
+lines that changed. Quiet output here just means nothing has changed
+relative to `main`.
+
+```elixir
+Tour.cast("05-green-modified", "check --only modified_tests")
+```
+
+## 6. ✅ `--partitions 3` — split the test suite
+
+`--only test --partitions 3` splits the suite across 3 OS processes
+running in parallel. Per-partition logs land in `.check/`.
+
+```elixir
+Tour.cast("06-green-partitions", "check --only test --partitions 3")
+```
+
+## 7. ⚠️ `check --fast` — the defects come back
+
+Now we restore the planted defects (`# DEMO:` comments in the lib
+sources) and run the fast subset (`format`, `compile`, `credo`). You see
+exactly how al_check renders failures: each check fans out, those that
+fail flip red, and the failure details follow below.
+
+```elixir
+Tour.cast("07-red-fast", "check --fast")
+```
+
+## Caveats
+
+* **First-time dialyzer is slow** — the PLT build can take a few
+  minutes. The recorder script warms the PLT before the green casts so
+  the playback stays snappy.
+* **`--watch` is best run live in a terminal** — there's no useful
+  Livebook rendering for it.
+* **Path dep on `../al_check`** — `mix.exs` references the sibling
+  `../al_check` checkout, so the two directories must live side-by-side.
