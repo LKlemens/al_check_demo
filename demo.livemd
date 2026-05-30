@@ -95,17 +95,7 @@ defmodule Tour do
 end
 ```
 
-## 1. Setup - is `check` on PATH?
-
-`check` is the al_check escript. If you've installed 
-(`mix check.install` then `asdf reshim` if you use asdf), 
-it lives on your PATH.
-
-```elixir
-Tour.cast("01-setup", "check --help | head -40")
-```
-
-## 2. ✅ Full run - everything green
+## 1. ✅ Full run - everything green
 
 A healthy project: `check` runs `format`, `compile`, `compile_test`,
 `credo`, `credo_strict`, `dialyzer`, and `test` in parallel. The fan-out
@@ -115,7 +105,7 @@ of checks across CPUs is the whole point.
 Tour.cast("02-green-full", "check")
 ```
 
-## 3. ✅ `--only test` - just the tests, in partitions
+## 2. ✅ `--only test` - just the tests, in partitions
 
 `check --only test` runs the test suite alone, partitioned in parallel
 per `.check.json`. Useful when you're iterating on test changes.
@@ -124,7 +114,7 @@ per `.check.json`. Useful when you're iterating on test changes.
 Tour.cast("03-green-tests", "check --only test")
 ```
 
-## 4. ✅ `--coverage` - coverage report + caching
+## 3. ✅ `--coverage` - coverage report + caching
 
 `check --coverage` runs the coverage calculation, merges partition
 results, and prints a per-module summary. Re-running with no source
@@ -134,7 +124,7 @@ changes hits the cache instead of re-running calcs.
 Tour.cast("04-green-coverage", "check --coverage")
 ```
 
-## 5. ✅ `--only modified_tests --repeat 10` - repeat changed tests
+## 4. ✅ `--only modified_tests --repeat 10` - repeat changed tests
 
 The `modified_tests` builtin compares the working tree against the base
 branch (set via `"base_branch"` in `.check.json`) and runs only the test
@@ -147,7 +137,7 @@ nothing's modified, there's nothing to repeat.
 Tour.cast("05-green-modified", "check --only modified_tests --repeat 10")
 ```
 
-## 6. ✅ `--partitions 5` - split the test suite
+## 5. ✅ `--partitions 5` - split the test suite
 
 `--only test --partitions 5` splits the suite across 5 OS processes
 running in parallel. Per-partition logs land in `.check/`.
@@ -156,7 +146,7 @@ running in parallel. Per-partition logs land in `.check/`.
 Tour.cast("06-green-partitions", "check --only test --partitions 5")
 ```
 
-## 7. ✅ `--verbose` - stream raw test output
+## 6. ✅ `--verbose` - stream raw test output
 
 By default al_check captures test output and prints only summaries.
 `--verbose` lets `mix test` write straight to the terminal.
@@ -165,7 +155,7 @@ By default al_check captures test output and prints only summaries.
 Tour.cast("07-green-verbose", "check --only test --verbose")
 ```
 
-## 8. ⚠️ `check --fast` - the defects come back
+## 7. ⚠️ `check --fast` - the defects come back
 
 Now we restore the planted defects (`# DEMO:` comments in the lib
 sources) and run the fast subset (`format`, `compile`, `credo`). You see

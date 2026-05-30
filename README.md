@@ -1,5 +1,7 @@
 # al_check_demo
 
+<img src="casts/02-green-full.gif" alt="check --green run" width="900" />
+
 Fixture project + Livebook tour for [`al_check`](../al_check). The library is
 deliberately **red on a fresh clone** — one planted defect per check
 category, each tagged `# DEMO:` in the source.
