@@ -1,0 +1,27 @@
+_build/
+deps/
+.check/
+cover/
+.elixir_ls/
+.livebook/
+node_modules/
+*.coverdata
+.DS_Store
+
+# Only the notebook + casts get baked into the image; everything else is
+# noise for the Livebook runtime.
+lib/
+test/
+config/
+mix.exs
+mix.lock
+.formatter.exs
+.tool-versions
+.dialyzer_ignore.exs
+.gitignore
+.credo.exs
+.sobelow-conf
+.check.json
+scripts/
+PLAN.md
+README.md
