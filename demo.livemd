@@ -11,16 +11,6 @@ parallel code-quality runner. The tour starts on a **healthy snapshot of the pro
 Scenario 7 then plants the seeded defects back in so you can watch
 `check --fast` surface them.
 
-Each scenario plays back a real terminal run via asciinema, with live
-spinner, colors, and animated test counts intact. Casts play at 30% speed
-so each step is easy to follow; idle gaps are trimmed to 2 seconds.
-
-If a cast is missing, the embed shows a hint. Generate them with:
-
-```
-./scripts/record-casts.sh
-```
-
 ## Helpers
 
 ```elixir
@@ -45,7 +35,7 @@ defmodule Tour do
 
       Kino.HTML.new("""
       <link rel="stylesheet" href="#{@cdn_css}" />
-      <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="width: 100%; margin: 0 auto;">
         #{prompt}
         <div id="#{id}"></div>
       </div>
@@ -55,6 +45,11 @@ defmodule Tour do
           'data:text/plain;base64,#{data}',
           document.getElementById('#{id}'),
           {
+            // Override the cast's recorded cols/rows (which can be ~364 if
+            // asciinema rec runs inside a wide tmux pane). Forcing 90x30 here
+            // makes characters render large under fit:'width'.
+            cols: 90,
+            rows: 30,
             fit: 'width',
             theme: 'asciinema',
             terminalFontSize: '36px',
@@ -66,7 +61,7 @@ defmodule Tour do
       """)
     else
       Kino.HTML.new("""
-      <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="width: 100%; margin: 0 auto;">
         #{prompt}
         <p style="font-style: italic; color: #888;">
           (no recording at <code>casts/#{name}.cast</code> - run

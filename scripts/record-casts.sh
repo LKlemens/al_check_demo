@@ -40,7 +40,12 @@ record() {
   local out="$CASTS/$name.cast"
   echo "==> recording $name :: $cmd"
   rm -f "$out"
-  asciinema rec --overwrite --cols 110 --rows 50 -c "bash -lc '$cmd'" "$out"
+  # `stty cols 90 rows 30` inside the inner bash forces tools (mix, check,
+  # credo, etc.) to lay out their output as if the terminal were 90x30,
+  # which matches the player's cols/rows override in demo.livemd. asciinema's
+  # own --cols/--rows are ignored when recording inside tmux, so this is the
+  # only reliable knob.
+  asciinema rec --overwrite -c "bash -lc 'stty rows 30 cols 90; $cmd'" "$out"
 }
 
 # Wipe any stale casts so the directory exactly matches demo.livemd's references.
