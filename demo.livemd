@@ -28,10 +28,10 @@ defmodule Tour do
   hasn't been recorded yet.
   """
   def cast(name, command) do
-    path = Path.expand("casts/#{name}.cast", __DIR__)
+    path = find_cast(name)
     prompt = render_prompt(command)
 
-    if File.exists?(path) do
+    if path do
       data = path |> File.read!() |> Base.encode64()
       id = "player-#{name}-#{System.unique_integer([:positive])}"
 
@@ -72,6 +72,19 @@ defmodule Tour do
       </div>
       """)
     end
+  end
+
+  # Try both the notebook-relative path (local Livebook) and the
+  # /apps/casts/ path (deployed via the Dockerfile). __DIR__ does not
+  # resolve to /apps in published app mode.
+  defp find_cast(name) do
+    Enum.find(
+      [
+        Path.expand("casts/#{name}.cast", __DIR__),
+        "/apps/casts/#{name}.cast"
+      ],
+      &File.exists?/1
+    )
   end
 
   defp render_prompt(command) do
