@@ -6,7 +6,7 @@
   "max_concurrency": 8,
   "coverage": {
     "mod": "native",
-    "limit": 70,
+    "limit": 80,
     "html": false
   },
   "fix": [

@@ -24,7 +24,7 @@ defmodule AlCheckDemo.MixProject do
 
   defp deps do
     [
-      {:al_check, path: "../al_check", runtime: false},
+      {:al_check, "~> 0.1.9", only: [:dev], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},

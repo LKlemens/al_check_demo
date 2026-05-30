@@ -1,5 +1,5 @@
-{"version":3,"term":{"cols":181,"rows":11,"type":"screen-256color","version":"tmux 3.5a"},"timestamp":1780092516,"command":"bash -lc 'check --coverage'","env":{"SHELL":"/bin/zsh"}}
+{"version":3,"term":{"cols":364,"rows":88,"type":"screen-256color","version":"tmux 3.5a"},"timestamp":1780121586,"command":"bash -lc 'check --coverage'","env":{"SHELL":"/bin/zsh"}}
 [0.221, "o", "\u001b[36m\r\nMerging coverage data...\u001b[0m\r\n"]
-[0.012, "o", "\u001b[36m(cached)\u001b[0m\r\n"]
-[0.001, "o", "\u001b[33m✓ Coverage: 79.41% | Report: cover/\u001b[0m\r\n"]
-[0.003, "x", "0"]
+[0.014, "o", "\u001b[36m(cached)\u001b[0m\r\n"]
+[0.001, "o", "\u001b[32m✓ Coverage: 100.0% | Report: cover/\u001b[0m\r\n"]
+[0.004, "x", "0"]

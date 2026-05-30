@@ -40,7 +40,7 @@ record() {
   local out="$CASTS/$name.cast"
   echo "==> recording $name :: $cmd"
   rm -f "$out"
-  asciinema rec --overwrite --cols 110 --rows 30 -c "bash -lc '$cmd'" "$out"
+  asciinema rec --overwrite --cols 110 --rows 50 -c "bash -lc '$cmd'" "$out"
 }
 
 # Wipe any stale casts so the directory exactly matches demo.livemd's references.
@@ -80,8 +80,9 @@ check >/dev/null 2>&1 || true   # populate .check cache (coverage baseline, etc.
 record 02-green-full        "check"
 record 03-green-tests       "check --only test"
 record 04-green-coverage    "check --coverage"
-record 05-green-modified    "check --only modified_tests"
-record 06-green-partitions  "check --only test --partitions 3"
+record 05-green-modified    "check --only modified_tests --repeat 10"
+record 06-green-partitions  "check --only test --partitions 5"
+record 07-green-verbose     "check --only test --verbose"
 
 # --- Restore defective state for the red pass.
 restore_red
@@ -93,6 +94,6 @@ mix compile 2>/dev/null || true
 MIX_ENV=test mix compile 2>/dev/null || true
 
 # --- The single RED scenario.
-record 07-red-fast "check --fast"
+record 08-red-fast "check --fast"
 
 echo "Done. Casts written to $CASTS"
