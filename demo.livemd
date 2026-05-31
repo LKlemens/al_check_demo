@@ -10,7 +10,7 @@ Mix.install([{:kino, "~> 0.13"}])
 
 A guided tour of [`al_check`](https://github.com/LKlemens/al_check), the
 parallel code-quality runner. The tour starts on a **healthy snapshot of the project**.
-Scenario 7 then plants the seeded defects back in so you can watch
+Scenario 3 then plants the seeded defects back in so you can watch
 `check --fast` surface them.
 
 ## Helpers
@@ -139,7 +139,18 @@ per `.check.json`. Useful when you're iterating on test changes.
 """)
 ```
 
-## 3. ✅ `--coverage` - coverage report + caching
+## 3. ⚠️ `check --fast` - the defects come back
+
+```elixir
+Tour.cast("08-red-fast", "check --fast", """
+Now we restore the planted defects (`# DEMO:` comments in the lib
+sources) and run the fast subset (`format`, `compile`, `credo`). You
+see exactly how al_check renders failures: each check fans out, those
+that fail flip red, and the failure details follow below.
+""")
+```
+
+## 4. ✅ `--coverage` - coverage report + caching
 
 ```elixir
 Tour.cast("04-green-coverage", "check --coverage", """
@@ -149,7 +160,7 @@ changes hits the cache instead of re-running calcs.
 """)
 ```
 
-## 4. ✅ `--only modified_tests --repeat 10` - repeat changed tests
+## 5. ✅ `--only modified_tests --repeat 10` - repeat changed tests
 
 ```elixir
 Tour.cast("05-green-modified", "check --only modified_tests --repeat 10", """
@@ -162,7 +173,7 @@ nothing's modified, there's nothing to repeat.
 """)
 ```
 
-## 5. ✅ `--partitions 5` - split the test suite
+## 6. ✅ `--partitions 5` - split the test suite
 
 ```elixir
 Tour.cast("06-green-partitions", "check --only test --partitions 5", """
@@ -171,23 +182,12 @@ running in parallel. Per-partition logs land in `.check/`.
 """)
 ```
 
-## 6. ✅ `--verbose` - stream raw test output
+## 7. ✅ `--verbose` - stream raw test output
 
 ```elixir
 Tour.cast("07-green-verbose", "check --only test --verbose", """
 By default al_check captures test output and prints only summaries.
 `--verbose` lets `mix test` write straight to the terminal.
-""")
-```
-
-## 7. ⚠️ `check --fast` - the defects come back
-
-```elixir
-Tour.cast("08-red-fast", "check --fast", """
-Now we restore the planted defects (`# DEMO:` comments in the lib
-sources) and run the fast subset (`format`, `compile`, `credo`). You
-see exactly how al_check renders failures: each check fans out, those
-that fail flip red, and the failure details follow below.
 """)
 ```
 
