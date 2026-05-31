@@ -7,7 +7,8 @@
   "coverage": {
     "mod": "native",
     "limit": 80,
-    "html": false
+    "html": false,
+    "baseline_cmd": "git show cover_do_not_delete:coverage.txt"
   },
   "fix": [
     {"run": "mix format"}

@@ -125,8 +125,11 @@ end
 ```elixir
 Tour.cast("02-green-full", "check", """
 A healthy project: `check` runs `format`, `compile`, `compile_test`,
-`credo`, `credo_strict`, `dialyzer`, and `test` in parallel. The
-fan-out of checks across CPUs is the whole point.
+`credo`, `credo_strict`, `dialyzer`, and `test` in parallel — and
+finishes by comparing current coverage against the baseline stored on
+the `cover_do_not_delete` branch (`baseline_cmd` in `.check.json`).
+The footer prints `+X% / -X% / same as baseline` so a regression is
+visible at a glance.
 """)
 ```
 

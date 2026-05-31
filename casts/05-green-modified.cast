@@ -1,9 +1,9 @@
-{"version":3,"term":{"cols":364,"rows":88,"type":"screen-256color","version":"tmux 3.5a"},"timestamp":1780123136,"command":"bash -lc 'stty rows 30 cols 90; check --only modified_tests --repeat 10'","env":{"SHELL":"/bin/zsh"}}
-[0.241, "o", "Running code quality checks in parallel...\r\n\r\nAvailable schedulers: 10\r\n\r\n"]
+{"version":3,"term":{"cols":364,"rows":88,"type":"screen-256color","version":"tmux 3.5a"},"timestamp":1780212041,"command":"bash -lc 'stty rows 30 cols 90; check --only modified_tests --repeat 10'","env":{"SHELL":"/bin/zsh"}}
+[0.238, "o", "Running code quality checks in parallel...\r\n\r\nAvailable schedulers: 10\r\n\r\n"]
 [0.003, "o", "  • Modified Tests            [RUNNING]\r\n"]
-[0.027, "o", "No modified test files on this branch\r\n"]
-[0.001, "o", "\u001b[s\u001b[1A\u001b[2K\u001b[32m  ✓ Modified Tests            [OK]\r\n\u001b[0m\u001b[u"]
-[0.003, "o", "\r\n"]
+[0.020, "o", "No modified test files on this branch\r\n"]
+[0.002, "o", "\u001b[s\u001b[1A\u001b[2K\u001b[32m  ✓ Modified Tests            [OK]\r\n\u001b[0m\u001b[u"]
+[0.004, "o", "\r\n"]
 [0.002, "o", "\r\nCompleted in 0.0s\r\n"]
 [0.000, "o", "\u001b[32m\r\n✓ All checks passed!\u001b[0m\r\n"]
-[0.004, "x", "0"]
+[0.005, "x", "0"]
