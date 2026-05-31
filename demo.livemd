@@ -143,8 +143,7 @@ per `.check.json`. Useful when you're iterating on test changes.
 
 ```elixir
 Tour.cast("08-red-fast", "check --fast", """
-Now we restore the planted defects (`# DEMO:` comments in the lib
-sources) and run the fast subset (`format`, `compile`, `credo`). You
+Now we restore the planted defects and run the fast subset (`format`, `compile`, `credo`). You
 see exactly how al_check renders failures: each check fans out, those
 that fail flip red, and the failure details follow below.
 """)
